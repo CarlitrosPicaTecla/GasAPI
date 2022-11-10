@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GasStation, GasStationResponse } from 'src/app/interfaces/gas-station.interface';
+import { GasStationsServiceService } from 'src/app/service/gas-stations-service.service';
 
 @Component({
   selector: 'app-gas-stations',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GasStationsComponent implements OnInit {
 
-  constructor() { }
+
+  gasStationsList : GasStation[]=[];
+  constructor(private gasStationService : GasStationsServiceService) { }
 
   ngOnInit(): void {
+  }
+
+  getGasStations(){
+    this.gasStationService.getGasStations().subscribe((res)=>{
+      this.gasStationsList=res.ListaEESSPrecio;
+    });
   }
 
 }

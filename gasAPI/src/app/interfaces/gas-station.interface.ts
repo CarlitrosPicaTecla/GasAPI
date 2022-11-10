@@ -1,6 +1,6 @@
 export interface GasStation {
     cp: string;
-    Dirección: string;
+    Direccion: string;
     Horario: string;
     Latitud: string;
     Localidad: string;
@@ -23,7 +23,7 @@ export interface GasStation {
     preciohidrogeno: string;
     Provincia: string;
     Remisión: string;
-    Rótulo: string;
+    Rotulo: string;
     tipoventa: string;
     '% BioEtanol': string;
     '% Éster metílico': string;
@@ -31,4 +31,11 @@ export interface GasStation {
     IDMunicipio: string;
     IDProvincia: string;
     IDCCAA: string;
+}
+
+export interface GasStationResponse{
+    Fecha : string;
+    ListaEESSPrecio: GasStation[];
+    Nota : string;
+    ResultadoConsola: string;
 }

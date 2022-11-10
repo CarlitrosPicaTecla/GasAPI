@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBase : "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/"
+  apiBase : "https://raw.githubusercontent.com/CarlitrosPicaTecla/GasAPI/main/gas_stations.json"
 
 };
 
