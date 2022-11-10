@@ -1,4 +1,7 @@
 {
+  "Fecha": "10/11/2022 8:47:44",
+"ListaEESSPrecio": [
+{
     "C.P.": "41770",
     "Dirección": "CALLE RONDA, 34",
     "Horario": "L-S: 08:00-21:00",
@@ -133,4 +136,5 @@
     "IDMunicipio": "6120",
     "IDProvincia": "41",
     "IDCCAA": "01"
-  },
+  }]
+}
