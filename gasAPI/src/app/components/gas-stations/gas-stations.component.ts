@@ -10,9 +10,11 @@ import { GasStationsServiceService } from 'src/app/service/gas-stations-service.
   styleUrls: ['./gas-stations.component.css']
 })
 export class GasStationsComponent implements OnInit {
-  valor : number = 0;
+  valor : number = 2.2;
 
   selected : string[]=["Gasolina 95","Diesel","Hidrogeno" ];
+
+  
 
  // const result = this.valor.filter(word => word.length > 6);
 
@@ -20,6 +22,13 @@ export class GasStationsComponent implements OnInit {
 
 
   gasStationsList : GasStation[]=[];
+  
+
+  gasStationSelect = this.gasStationsList.filter(gas => {
+      Number( gas['Precio Gasolina 95 E5']) && Number( gas['Precio Gasoleo A']) && Number(gas['Precio Hidrogeno']) < this.valor});
+  
+
+     
 
   constructor(private gasStationService : GasStationsServiceService, httpClient: HttpClient) {
 
@@ -27,6 +36,7 @@ export class GasStationsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGasStations();
+   
   }
 
   getGasStations(){

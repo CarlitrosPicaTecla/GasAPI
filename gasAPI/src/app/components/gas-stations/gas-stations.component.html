@@ -26,7 +26,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-card class="example-card" *ngFor="let station of gasStationsList">
+  <mat-card class="example-card" *ngFor="let station of gasStationSelect">
     <mat-card-header>
       <mat-card-title>{{ station["Rótulo"] }}</mat-card-title>
       <mat-card-subtitle
@@ -40,8 +40,8 @@
     />
 
     <mat-card-content>
-      <p>Gasolina 95: {{ station["Precio Gasolina 95 E5"] }}€</p>
-      <p>Gasolea A: {{ station["Precio Gasoleo A"] }}€</p>
+      <p>{{ selected[0] == "Gasolina 95"? "Gasolina 95: " +station["Precio Gasolina 95 E5"] : ""}}€</p>
+      <p>{{selected[1] == "Diesel" ? "Diesel: " +station["Precio Gasoleo A"] : ""}}€</p>
       <p>Hidrogeno: {{ station["Precio Hidrogeno"] }}€</p>
     </mat-card-content>
     <mat-card-actions>
