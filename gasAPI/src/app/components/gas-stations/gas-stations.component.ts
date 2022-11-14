@@ -55,6 +55,8 @@ export class GasStationsComponent implements OnInit {
   }
 
   filtarProvincias(){
+    this.gasStationsListAux=this.gasStationsList;
+
     if(this.provinciasSelect.length !=0 ){
       this.gasStationsListAux = this.gasStationsList.filter((gas) => 
       this.provinciasSelect.includes(gas.IDProvincia));
