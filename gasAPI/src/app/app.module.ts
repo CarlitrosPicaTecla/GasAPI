@@ -23,7 +23,8 @@ import { FormsModule } from '@angular/forms';
     MaterialsImportModule,
     GoogleMapsModule,
     HttpClientJsonpModule,
-    FormsModule
+    FormsModule,
+  
   ],
   providers: [],
   bootstrap: [AppComponent]
