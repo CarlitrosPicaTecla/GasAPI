@@ -64,13 +64,15 @@ export class GasStationsComponent implements OnInit {
 
 
   mostrarListaAux(precio : number, combustible : string){
+    //this.gasStationsListAux=[];
+
     this.filtarProvincias();
 
     switch (combustible) {
       case "Todos":
         this.gasStationsListAux=this.gasStationsListAux.filter(gas =>   +gas['Precio Gasolina 95 E5'].replace(",",".") &&  +gas['Precio Gasoleo A'].replace(",",".")  < precio);
         break;
-    
+
         case "Gasolina 95":
         this.gasStationsListAux= this.gasStationsListAux.filter(gas =>  +gas['Precio Gasolina 95 E5'].replace(",",".") < precio);
         break;
@@ -82,6 +84,7 @@ export class GasStationsComponent implements OnInit {
           break;  
       default:
         break;
+        
     }
   }
 
