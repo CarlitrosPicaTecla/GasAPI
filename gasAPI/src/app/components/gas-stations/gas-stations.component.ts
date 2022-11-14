@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { map, catchError, of, Observable } from 'rxjs';
 import { GasStation, GasStationResponse } from 'src/app/interfaces/gas-station.interface';
+import { Provincia } from 'src/app/interfaces/provincia.interface';
 import { GasStationsServiceService } from 'src/app/service/gas-stations-service.service';
+import { ProvinciaService } from 'src/app/service/provincia.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -17,7 +19,6 @@ export class GasStationsComponent implements OnInit {
 
   selected : string[]=["Todos","Gasolina 95","Diesel","Hidrogeno"];
 
-  provincias : string[]=["Sevilla","Cádiz","Huelva","Jaen","Granada","Cordoba","Almeria","Malaga"];
 
 
 
@@ -30,11 +31,15 @@ export class GasStationsComponent implements OnInit {
   gasStationsList : GasStation[]=[];
   gasStationsListAux : GasStation[]=[];
   gasStationProv : string[]=[];
+
+  provinciasList : Provincia[]=[];
+  provinciasSelect : string[]=[];
+
   
   apiLoaded: Observable<boolean>;
 
   
-  constructor(private gasStationService : GasStationsServiceService, httpClient: HttpClient) {
+  constructor(private gasStationService : GasStationsServiceService, httpClient: HttpClient, private provinciaservice : ProvinciaService) {
     this.apiLoaded = httpClient.jsonp(`https://maps.googleapis.com/maps/api/js?key=${environment.apiKey}`, 'callback')
         .pipe(
           map(() => true),
@@ -45,16 +50,17 @@ export class GasStationsComponent implements OnInit {
   ngOnInit(): void {
     this.getGasStations();
    // this.gasStationSelect;
+   this.getProvincias();
    
   }
 
   filtarProvincias(){
 
-    if(this.gasStationProv.length!=0){
-      this.gasStationsListAux = this.gasStationsListAux.filter((gas) => 
-      this.gasStationProv.includes(gas.Provincia));
 
-    }
+      this.gasStationsListAux = this.gasStationsList.filter((gas) => 
+      this.provinciasSelect.includes(gas.IDProvincia));
+
+    
   }
 
 
@@ -88,6 +94,13 @@ export class GasStationsComponent implements OnInit {
       this.gasStationsList=res.ListaEESSPrecio;
       this.gasStationsListAux=this.gasStationsList;
     });
+  }
+
+  getProvincias(){
+    this.provinciaservice.getProvincias().subscribe((res)=>{
+     this.provinciasList=res;
+    });
+
   }
 
 

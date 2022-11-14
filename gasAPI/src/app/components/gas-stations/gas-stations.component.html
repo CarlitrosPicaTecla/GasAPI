@@ -28,8 +28,8 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Provincias</mat-label>
-    <mat-select multiple [(value)]="gasStationProv">
-      <mat-option *ngFor="let provincia of provincias" value="{{provincia}}" >{{provincia}}</mat-option>
+    <mat-select multiple [(ngModel)]="provinciasSelect" (selectionChange)="mostrarListaAux(valor, select)">
+      <mat-option *ngFor="let provincia of provinciasList" [value]="provincia.IDPovincia" >{{provincia.Provincia}}</mat-option>
     </mat-select>
   </mat-form-field>
   
@@ -38,7 +38,7 @@
     <mat-card-header>
       <mat-card-title>{{ station["Rótulo"] }}</mat-card-title>
       <mat-card-subtitle
-        >{{ station["Dirección"] }}, {{ station["Municipio"] }}
+        >{{ station["Dirección"] }}, {{ station["Municipio"]}}, {{station["Provincia"]}}
       </mat-card-subtitle>
     </mat-card-header>
     <div *ngIf="apiLoaded | async">
