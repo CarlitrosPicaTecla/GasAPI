@@ -4,6 +4,7 @@ import { MatSliderChange } from '@angular/material/slider';
 import { map, catchError, of, Observable } from 'rxjs';
 import { GasStation, GasStationResponse } from 'src/app/interfaces/gas-station.interface';
 import { GasStationsServiceService } from 'src/app/service/gas-stations-service.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-gas-stations',
@@ -16,6 +17,11 @@ export class GasStationsComponent implements OnInit {
 
   selected : string[]=["Todos","Gasolina 95","Diesel","Hidrogeno"];
 
+  provincias : string[]=["Sevilla","Cádiz","Huelva","Jaen","Granada","Cordoba","Almeria","Malaga"];
+
+
+
+
   select : string="Todos";
 
 
@@ -23,13 +29,17 @@ export class GasStationsComponent implements OnInit {
 
   gasStationsList : GasStation[]=[];
   gasStationsListAux : GasStation[]=[];
+  gasStationProv : string[]=[];
   
+  apiLoaded: Observable<boolean>;
 
-  gasStationSelect = this.gasStationsList.filter(gas => {
-     Number( gas['Precio Gasolina 95 E5'][1].split('.')) && Number( gas['Precio Gasoleo A'][1].split('.')) || Number(gas['Precio Hidrogeno'][1].split('.')) < this.valor });
   
   constructor(private gasStationService : GasStationsServiceService, httpClient: HttpClient) {
-
+    this.apiLoaded = httpClient.jsonp(`https://maps.googleapis.com/maps/api/js?key=${environment.apiKey}`, 'callback')
+        .pipe(
+          map(() => true),
+          catchError(() => of(false)),
+        );
    }
 
   ngOnInit(): void {
@@ -38,22 +48,35 @@ export class GasStationsComponent implements OnInit {
    
   }
 
+  filtarProvincias(){
+
+    if(this.gasStationProv.length!=0){
+      this.gasStationsListAux = this.gasStationsListAux.filter((gas) => 
+      this.gasStationProv.includes(gas.Provincia));
+
+    }
+  }
+
 
   mostrarListaAux(precio : number, combustible : string){
 
     switch (combustible) {
       case "Todos":
         this.gasStationsListAux=this.gasStationsList.filter(gas =>   +gas['Precio Gasolina 95 E5'].replace(",",".") &&  +gas['Precio Gasoleo A'].replace(",",".")  < precio);
+        this.filtarProvincias();
         break;
     
         case "Gasolina 95":
         this.gasStationsListAux= this.gasStationsList.filter(gas =>  +gas['Precio Gasolina 95 E5'].replace(",",".") < precio);
+        this.filtarProvincias();
         break;
         case "Diesel":
           this.gasStationsListAux= this.gasStationsList.filter(gas => +gas['Precio Gasoleo A'].replace(",",".") < precio);
+          this.filtarProvincias();
           break;
         case "Hidrogeno":
           this.gasStationsListAux= this.gasStationsList.filter(gas =>  +gas['Precio Hidrogeno'].replace(",",".") < precio);
+          this.filtarProvincias();
           break;  
       default:
         break;

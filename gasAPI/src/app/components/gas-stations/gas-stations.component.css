@@ -1,5 +1,5 @@
 .example-card {
-  max-width: 400px;
+  max-width: 600px;
   display: inline-block;
   margin: 60px;
 }
@@ -17,7 +17,7 @@ padding: 20px;
 }
 
 google-map{
-    width: 300px;
+    width: 200px;
 }
 mat-slider{
     display: block;

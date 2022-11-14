@@ -26,6 +26,14 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-form-field appearance="fill">
+    <mat-label>Provincias</mat-label>
+    <mat-select multiple [(value)]="gasStationProv">
+      <mat-option *ngFor="let provincia of provincias" value="{{provincia}}" >{{provincia}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+
   <mat-card class="example-card" *ngFor="let station of gasStationsListAux">
     <mat-card-header>
       <mat-card-title>{{ station["Rótulo"] }}</mat-card-title>
@@ -33,11 +41,9 @@
         >{{ station["Dirección"] }}, {{ station["Municipio"] }}
       </mat-card-subtitle>
     </mat-card-header>
-    <img
-      mat-card-image
-      src="https://neomotor.epe.es/binrepository/1200x1341/0c181/1200d980/none/2594535/QYXC/img-3323_285-36349111_20221004095152.jpg"
-      alt="Photo of a Shiba Inu"
-    />
+    <div *ngIf="apiLoaded | async">
+      <google-map></google-map>
+    </div>  
 
     <mat-card-content>
       <p>{{ select == "Gasolina 95" || select =="Todos"? "Gasolina 95: " +station["Precio Gasolina 95 E5"]+"€" : ""}}</p>
