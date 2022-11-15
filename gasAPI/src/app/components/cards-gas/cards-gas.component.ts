@@ -1,10 +1,7 @@
-import { getLocaleDirection } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { MatSliderChange } from '@angular/material/slider';
-import { map, catchError, of, Observable, isEmpty } from 'rxjs';
-import { GasStation, GasStationResponse } from 'src/app/interfaces/gas-station.interface';
+import { Component, OnInit } from '@angular/core';
+import { Observable, map, catchError, of } from 'rxjs';
+import { GasStation } from 'src/app/interfaces/gas-station.interface';
 import { Municipio } from 'src/app/interfaces/municipios.interface';
 import { Provincia } from 'src/app/interfaces/provincia.interface';
 import { GasStationsServiceService } from 'src/app/service/gas-stations-service.service';
@@ -12,11 +9,11 @@ import { ProvinciaService } from 'src/app/service/provincia.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-gas-stations',
-  templateUrl: './gas-stations.component.html',
-  styleUrls: ['./gas-stations.component.css']
+  selector: 'app-cards-gas',
+  templateUrl: './cards-gas.component.html',
+  styleUrls: ['./cards-gas.component.css']
 })
-export class GasStationsComponent implements OnInit {
+export class CardsGasComponent implements OnInit {
 
   valor : number = 3;
 
@@ -44,13 +41,7 @@ export class GasStationsComponent implements OnInit {
   
   apiLoaded: Observable<boolean>;
 
-  center: google.maps.LatLngLiteral = {lat: 39.3800089, lng: -7.5273093};
-  zoom = 6;
-  markerOptions: google.maps.MarkerOptions = {draggable: true};
-  markerPositions: google.maps.LatLngLiteral[] = [];
-
-  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
-
+  
 
   constructor(private gasStationService : GasStationsServiceService, httpClient: HttpClient, private provinciaservice : ProvinciaService) {
     this.apiLoaded = httpClient.jsonp(`https://maps.googleapis.com/maps/api/js?key=${environment.apiKey}`, 'callback')
@@ -64,56 +55,19 @@ export class GasStationsComponent implements OnInit {
     this.getGasStations();
    // this.gasStationSelect;
    this.getProvincias();
-   this.getLocalion();
- 
+
+
    
   }
 
-  openInfoWindow(marker: MapMarker, infoWindow : MapInfoWindow) {
-    infoWindow.open(marker);
-  }
 
-  public getLocalion(){
-    navigator.geolocation.getCurrentPosition((position)=>{
 
-      this.center = {
-        lat : position.coords.latitude,
-        lng : position.coords.longitude
-
-      };
-    });
-  }
-
-  saveGasLocation(){
-
-    if(this.gasStationsListAux){
-      this.gasStationsListAux.forEach((gas) => {
-        this.markerPositions.push({
-          lat : +gas.Latitud.replace(",","."),
-          lng : +gas['Longitud (WGS84)'].replace(",",".")
-        });
-      });
-
-    }
-
-  }
-
-  positionLocationLat(lat : string){
-    return +lat.replace(",",".");
-  }
-
-  positionLocationLng(lng : string){
-    return +lng.replace(",",".");
-  }
   filtarProvincias(){
-    this.markerPositions =[];
-
     this.gasStationsListAux=this.gasStationsList;
 
     if(this.provinciasSelect.length !=0 ){
       this.gasStationsListAux = this.gasStationsList.filter((gas) => 
       this.provinciasSelect.includes(gas.IDProvincia));
-
      // this.gasStationsListAux = this.gasStationsListAux.filter((gas =>  +gas['Precio Gasolina 95 E5'].replace(",",".") &&  +gas['Precio Gasoleo A'].replace(",",".")  < precio)); 
     }
     }
@@ -123,7 +77,6 @@ export class GasStationsComponent implements OnInit {
     //this.gasStationsListAux=[];
 
     this.filtarProvincias();
-
 
     switch (combustible) {
       case "Todos":
@@ -143,8 +96,6 @@ export class GasStationsComponent implements OnInit {
         break;
         
     }
-    this.saveGasLocation();
-
   }
 
   getGasStations(){
@@ -167,10 +118,4 @@ export class GasStationsComponent implements OnInit {
       this.municipioList=res;
     });
   }
-
-  showGasMarkerPosition(){
-    
-  }
-
-
 }

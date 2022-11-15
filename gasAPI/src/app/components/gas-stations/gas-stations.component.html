@@ -1,60 +1,84 @@
 <div class="cont">
-  <label
-    for="steps-range"
-    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-    >Precio: {{ valor }}€</label
-  >
-  <mat-slider
-    [(ngModel)]="valor"
-    style="width: 15%"
-    id="steps-range"
-    type="range"
-    min="1"
-    max="2.5"
-    step="0.05"
-    class="w-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-  ></mat-slider>
-  <button (click)="mostrarListaAux(valor, select)">Filtrar</button>
-
-  <h4>Tipo de Combustible</h4>
-  <mat-form-field appearance="fill">
-    <mat-label >Combustible</mat-label>
-    <mat-select [(value)]="select" name="Combustible">
-      <mat-option value="{{comb}}" *ngFor="let comb of selected" >
-        {{comb}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Provincias</mat-label>
-    <mat-select multiple [(ngModel)]="provinciasSelect" (selectionChange)="mostrarListaAux(valor, select)">
-      <mat-option *ngFor="let provincia of provinciasList" [value]="provincia.IDPovincia" >{{provincia.Provincia}}</mat-option>
-    </mat-select>
-  </mat-form-field>
   
+  <label
+  for="steps-range"
+  class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+  >Precio: {{ valor }}€</label
+>
+<mat-slider
+  [(ngModel)]="valor"
+  style="width: 15%"
+  id="steps-range"
+  type="range"
+  min="1"
+  max="2.5"
+  step="0.05"
+  class="w-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+ 
+></mat-slider>
+<button mat-raised-button color="primary" (click)="mostrarListaAux(valor, select)">Filtrar</button>
 
-  <mat-card class="example-card" *ngFor="let station of gasStationsListAux">
-    <mat-card-header>
-      <mat-card-title>{{ station["Rótulo"] }}</mat-card-title>
-      <mat-card-subtitle
-        >{{ station["Dirección"] }}, {{ station["Municipio"]}}, {{station["Provincia"]}}
-      </mat-card-subtitle>
-    </mat-card-header>
-    <div *ngIf="apiLoaded | async">
-      <google-map></google-map>
+<h4>Tipo de Combustible</h4>
+<mat-form-field appearance="fill">
+  <mat-label >Combustible</mat-label>
+  <mat-select [(value)]="select" name="Combustible" (selectionChange)="mostrarListaAux(valor, select)">
+    <mat-option value="{{comb}}" *ngFor="let comb of selected" >
+      {{comb}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
 
-    </div>  
+<mat-form-field appearance="fill">
+  <mat-label>Provincias</mat-label>
+  <mat-select multiple [(ngModel)]="provinciasSelect" (selectionChange)="mostrarListaAux(valor, select)">
+    <mat-option *ngFor="let provincia of provinciasList" [value]="provincia.IDPovincia" >{{provincia.Provincia}}</mat-option>
+  </mat-select>
+</mat-form-field>
 
-    <mat-card-content>
-      <p>{{ select == "Gasolina 95" || select =="Todos"? "Gasolina 95: " +station["Precio Gasolina 95 E5"]+"€" : ""}}</p>
-      <p>{{select == "Diesel"|| select =="Todos" ? "Diesel: " +station["Precio Gasoleo A"]+"€" : ""}}</p>
-      <p>{{ select == "Hidrogeno"|| select =="Todos"? "Precio Hidrogeno: " +station["Precio Hidrogeno"]+"€" : "" }}</p>
 
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>SHARE</button>
-    </mat-card-actions>
-  </mat-card>
+<div *ngIf="apiLoaded | async" class="map">
+  <google-map height="500px"
+  width="750px"
+  [options]="markerOptions"
+  [center]="center"
+  [zoom]="zoom">
+  <ng-container  *ngFor="let gas of  gasStationsListAux">
+<map-marker 
+    #marker="mapMarker"
+    [position]="{lat: positionLocationLat(gas.Latitud), lng : positionLocationLng(gas['Longitud (WGS84)'])}"
+    [options]="markerOptions"  (mapClick)="openInfoWindow(marker, infoWindow)"></map-marker>
+    <map-info-window #infoWindow="mapInfoWindow">
+    <p style="font-weight: 300; ">Horario: </p>
+    <p style="font-weight: 900; text-decoration: underline;   ">{{gas.Horario}}</p> 
+    <p style="font-weight: 700;">{{gas['Rótulo']}}</p>
+    <p> {{gas['Dirección']}}</p>
+    <p style="color: red;font-weight: 500; ">{{gas.Municipio}} ({{gas.Provincia}})</p>
+    <p style="font-weight: 500;"><span style="color: green;">Gasolina 95:</span> {{gas['Precio Gasolina 95 E5']}}€</p>
+    <p style="font-weight: 500;"><span style="color: orange; ">Diesel:</span>  {{gas['Precio Gasoleo A']}}€</p>
+    </map-info-window>
+  </ng-container>
+
+</google-map>
+</div>
+
+<mat-card class="example-card" *ngFor="let station of gasStationsListAux">
+  <mat-card-header>
+    <mat-card-title>{{ station["Rótulo"] }}</mat-card-title>
+    <mat-card-subtitle
+      >{{ station["Dirección"] }}, {{ station["Municipio"]}}, {{station["Provincia"]}}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p>{{ select == "Gasolina 95" || select =="Todos"? "Gasolina 95: " +station["Precio Gasolina 95 E5"]+"€" : ""}}</p>
+    <p>{{select == "Diesel"|| select =="Todos" ? "Diesel: " +station["Precio Gasoleo A"]+"€" : ""}}</p>
+    <p>{{ select == "Hidrogeno"|| select =="Todos"? "Precio Hidrogeno: " +station["Precio Hidrogeno"]+"€" : "" }}</p>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>LIKE</button>
+    <button mat-button>SHARE</button>
+  </mat-card-actions>
+</mat-card>
+
 </div>

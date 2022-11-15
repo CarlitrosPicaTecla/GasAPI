@@ -1,0 +1,33 @@
+.example-card {
+    max-width: 500px;
+    display: inline-block;
+    margin: 50px;
+  }
+  
+  
+  mat-card-content  {
+    display: inline-block;
+    font-weight: 600;
+  text-align: center;
+  padding: 20px;
+  }
+  .cont{
+      text-align: center;
+      margin-top: 40px;
+  }
+  
+  google-map{
+      width: 200px;
+  }
+  mat-slider{
+      display: block;
+      text-align: center;
+      margin: 0px auto;
+  }
+  
+  mat-form-field{
+      display: block;
+      width: 11%;
+      margin: 0px auto;
+  }
+  

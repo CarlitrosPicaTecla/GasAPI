@@ -9,11 +9,14 @@ import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { MaterialsImportModule } from './materials-import/materials-import.module';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { FormsModule } from '@angular/forms';
+import { MatAutocomplete } from '@angular/material/autocomplete';
+import { CardsGasComponent } from './components/cards-gas/cards-gas.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GasStationsComponent
+    GasStationsComponent,
+    CardsGasComponent
   ],
   imports: [
     BrowserModule,
@@ -23,8 +26,7 @@ import { FormsModule } from '@angular/forms';
     MaterialsImportModule,
     GoogleMapsModule,
     HttpClientJsonpModule,
-    FormsModule,
-  
+    FormsModule  
   ],
   providers: [],
   bootstrap: [AppComponent]
