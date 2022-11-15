@@ -7,6 +7,7 @@
 >
 <mat-slider
   [(ngModel)]="valor"
+  (valueChange)="mostrarListaAux(valor, select)"
   style="width: 15%"
   id="steps-range"
   type="range"
@@ -16,7 +17,7 @@
   class="w-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
  
 ></mat-slider>
-<button mat-raised-button color="primary" (click)="mostrarListaAux(valor, select)">Filtrar</button>
+<!--<button mat-raised-button color="primary" (click)="mostrarListaAux(valor, select)">Filtrar</button>-->
 
 <h4>Tipo de Combustible</h4>
 <mat-form-field appearance="fill">
